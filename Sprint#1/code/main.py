@@ -1,4 +1,5 @@
-from classes import student, course, criteria
+from classes import student, course, criteria, admin
+
 
 #screen creation -- import
 import turtle
@@ -8,12 +9,12 @@ import tkinter as tk
 
 
 def test():
-  namesson = student.Student('Name N. Namesson III Jr.')
-  joe = student.Student('Joe')
-  john = student.Student('John')
-  jane = student.Student('Jane')
-  jeffrey = student.Student('Jeffrey')
-  imposter = student.Student('Imposter')
+  namesson = student.Student(1, 'Name Nameer N. Namesson III Jr. Esquire')
+  joe = student.Student(2, 'Joe')
+  john = student.Student(3, 'John')
+  jane = student.Student(4, 'Jane')
+  jeffrey = student.Student(5, 'Jeffrey')
+  imposter = student.Student(6, 'Imposter')
   
   games = criteria.Criteria('Games')
   games.add_student(imposter)
@@ -53,6 +54,31 @@ def test():
   print(f'Remove Name:\n{c1}\n')
   jeffrey.remove_course(c1)
   print(f'Remove Jeffrey:\n{c1}\n')
+
+
+  print('\n'*3 + 'Admin Test:')
+  
+  # Simulating admin actions
+  boss = admin.Admin("Admin", 1234, 
+                     student_edit = True, 
+                     student_addcourse = True, 
+                     student_removecourse = True)  # Assuming admin has all permissions
+  oldname = namesson.name
+  print(f"\nStudent: {namesson}")
+  boss.edit_student_info(namesson)
+  print(f"\nStudent {oldname} is now {namesson}")
+
+  # Add a course to a student
+  print(f"\nStudent: {namesson}'s Current Courses")
+  print([course.name for course in namesson.courses])
+  boss.add_course_to_student(namesson, c0)
+  print(f"\nStudent: {namesson}'s Current Courses after Adding")
+  print([course.name for course in namesson.courses], '\n')
+
+  # Remove a course from a student
+  boss.remove_course_from_student(namesson, c0)
+  print(f"Student: {namesson}'s Courses after Removal")
+  print([course.name for course in namesson.courses], '\n')
 
 def do_stuff():
    for color in ["red", "yellow", "green"]:
