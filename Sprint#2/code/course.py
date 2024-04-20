@@ -33,7 +33,7 @@ class Course:
       self.capacity = capacity
       self.students = [] 
       self.waitlist = []
-      self.criteria = [criterion for criterion in criteria]
+      self.criteria = list(criteria)
       self.notify()
 
     @property

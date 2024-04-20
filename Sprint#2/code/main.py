@@ -1,11 +1,11 @@
-from classes import student, course, criteria, admin
+from classes import student, course, criteria, admin, interface
+
 
 
 #screen creation -- import
 import turtle
-import tkinter as tk
-
-
+#import tkinter as tk
+from  tkinter import *
 
 
 def test():
@@ -15,10 +15,11 @@ def test():
   jane = student.Student(4, 'Jane')
   jeffrey = student.Student(5, 'Jeffrey')
   imposter = student.Student(6, 'Imposter')
-  
+
   games = criteria.Criteria('Games')
   games.add_student(imposter)
   games.add_student(joe)
+  games.add_student(namesson)
   cecs = criteria.Criteria('CECS')
   cecs.add_student(joe)
   cecs.add_student(john)
@@ -33,6 +34,10 @@ def test():
   john.read_notify()
   imposter.read_notify()
 
+
+  print("Please press Y to waitlist all test students so that value error not occur")
+
+  
   namesson.add_course(c1)
   joe.add_course(c1)
   john.add_course(c1)
@@ -59,10 +64,11 @@ def test():
   print('\n'*3 + 'Admin Test:')
   
   # Simulating admin actions
-  boss = admin.Admin("Admin", 1234, 
+  boss = admin.Admin(1234, "Admin", 
                      student_edit = True, 
                      student_addcourse = True, 
-                     student_removecourse = True)  # Assuming admin has all permissions
+                     student_removecourse = True,
+                     create_course = True)  # Assuming admin has all permissions
   oldname = namesson.name
   print(f"\nStudent: {namesson}")
   boss.edit_student_info(namesson)
@@ -80,52 +86,247 @@ def test():
   print(f"Student: {namesson}'s Courses after Removal")
   print([course.name for course in namesson.courses], '\n')
 
-def do_stuff():
-   for color in ["red", "yellow", "green"]:
-    my_lovely_turtle.color(color)
-    my_lovely_turtle.right(120)
-def press():
-   do_stuff()
+  # Create a new course
+  new_course = boss.create_course(games)
+  print(new_course)
+  namesson.read_notify()
+  namesson.add_course(new_course)
+  print(f"Student: {namesson}'s Courses after Creating")
+  print([course.name for course in namesson.courses], '\n')
+  print(new_course)
+  #print(new_course.name)
 
+
+'''Prototype of student-admin login system'''
+# import turtle
+# from tkinter import *
+# from classes import student, course, criteria, admin
+
+# # Function to display a message on the screen using Turtle
+# def display_message(message, y_offset=0):
+#     pen.goto(0, y_offset)
+#     pen.write(message, align="center", font=("Arial", 16, "normal"))
+
+# # Function to clear the screen using Turtle
+# def clear_screen():
+#     pen.clear()
+
+# # Function to display student actions using Turtle
+# def display_student_actions():
+#     clear_screen()
+#     display_message("Student Actions", 150)
+#     display_message("1. View Courses", 125)
+#     display_message("2. Enroll in Course", 100)
+#     display_message("3. Drop Course", 75)
+
+# # Function to display admin actions using Turtle
+# def display_admin_actions():
+#     clear_screen()
+#     display_message("Admin Actions", 150)
+#     display_message("1. Create Course", 125)
+#     display_message("2. Add Student to Course", 100)
+#     display_message("3. Remove Student from Course", 75)
+    
+# #def button(): # for student?
+  
+  
+# # Function to handle student interactions
+# def student_interaction():
+#     display_student_actions()
+#     action = screen.textinput("Student Actions", "Enter action number (1-3): ")
+#     # Handle student actions based on input
+
+  
+#     #experimenting on student
+
+#     pen = turtle.Turtle()
+#     pen.hideturtle()
+    
+#     button_x = -50
+#     button_y = -50
+#     buttonlength = 100
+#     buttonwidth = 50
+    
+    
+
+
+
+# # Function to handle admin interactions
+# def admin_interaction():
+#     display_admin_actions()
+#     #turtle.onscreenclick(buttonClick, 1)
+#     password = screen.textinput(".", "Input Password")
+#     action = screen.textinput("Admin Actions", "Enter action number (1-3): ")
+    
+    
+    
+
+    
+    
+    # Handle admin actions based on input
+
+
+
+def get_int_range(prompt: str, min: int, max: int):
+  while True:
+    try:
+      choice = int(input(prompt))
+      if choice in range(min, max + 1):
+        return choice
+      else:
+        print("\nInvalid input. Please try again\n")
+    except ValueError:
+      print("\nInvalid input. Please try again\n")
+
+def display_login_options() -> int:
+  """Displays login options for the user to select."""
+
+  prompt = """
+Select a user type:
+1. Student
+2. Admin
+
+0. Quit
+"""
+
+  choice = get_int_range(prompt, 0, 2)
+  return choice
+
+def display_student_actions() -> int:
+  prompt = """
+Do student stuff:
+1. Student thing 1
+2. Student thing 2
+
+0. Log Out
+"""
+  choice = get_int_range(prompt, 0, 2)
+  return choice
+
+def display_admin_actions() -> int:
+  prompt = """Do admin stuff:
+1. Admin thing 1
+2. Admin thing 2
+3. Admin thing 3
+
+0. Log Out
+"""
+  choice = get_int_range(prompt, 0, 5)
+  return choice
+  
+
+# Main function to run the program
 def main():
-  test()
+  authenticationSystem = interface.AuthenticationSystem()
+  over = False
+  while not over:
+    usertype = display_login_options()
+    if usertype == 0:
+      over = True
+      break
+    else:
+      loggingIn = True
+    while loggingIn:
+      user = authenticationSystem.login(usertype)
+      if user is None:
+        failprompt = "Select an option to continue:\n" \
+        "1. Try Again\n"\
+        "2. Return\n"\
+        "3. Quit\n"
+        option = get_int_range(failprompt, 1, 3)
+        if loggingIn == 1:
+          loggingIn = True
+        elif loggingIn == 2:
+          loggingIn = False
+        elif loggingIn == 3:
+          over = True
+        else:
+          raise ValueError
+      else:
+        loggingIn = False
+        loggedIn = True
+        print(f"Welcome, {str(user)}")
 
-  #screen creation
+        while loggedIn:
+          ### STUDENT ###
+          if usertype == 1:
+            # user = student object already
+            action = display_student_actions()
+            if action == 1:
+              pass
+            if action == 2:
+              pass
+            # ...
 
-  # Set up the screen
-  screen = turtle.Screen()
-  screen.title("Admin Screen")
-  #screen.setup(width=600, height=400)
-  screen.bgcolor("white") 
+          ### ADMIN ###
+          elif usertype == 2:
+            # user = admin object already
+            action = display_admin_actions()
+            if action == 1:
+              #admin action / change the name of the student
 
-  canvas = screen.getcanvas()
-  button = tk.Button(canvas.master, text="Press me", command=press)
-  canvas.create_window(-200, -100, window=button)
-  my_lovely_turtle = turtle.Turtle(shape="turtle")
-  turtle.done()
-  # Set up the turtle
-  pen = turtle.Turtle()
-  pen.speed(0)  # Set the drawing speed to the fastest
+              pass
+            if action == 2:
+              #see classes
 
-  # Draw something on the screen (e.g., a rectangle)
+              pass
 
-  # Write text onto the screen
-  pen.penup()
-  pen.goto(0, 50)
-  pen.write("Log in window", align="center", font=("Arial", 10, "normal"))
+            if action == 3:
+              #see students
 
-  # Keep the window open until closed by the user
-  screen.mainloop()
+              pass
+
+            if action == 4:
+              #add student to courses
+
+              pass
+
+            if action == 5:
+              # remove stuent from course
+              pass
+            # ...
+
+          else:
+            raise ValueError("User has impossible role!")
+          if action == 0:
+            loggedIn = False
+  # test()
+  
 
 
-  screen = turtle.Screen()
-   
-   
-   
+### [TURTLE] ###
+#     while True:
+#         role = screen.textinput("Login", "Enter your role (admin/student): ").lower()
+        
+#         if role == "admin":
+#             admin_interaction()
+#         elif role == "student":
+#             student_interaction()
+#         else:
+#             display_message("Invalid role. Please enter 'admin' or 'student'.")
+#             continue
+
+# # Set up the screen
+# screen = turtle.Screen()
+# screen.setup(width=650, height=650)
+# screen.title("Student-Admin")
+# screen.bgcolor("skyblue")
+
+# # Set up the turtle
+# pen = turtle.Turtle()
+# pen.speed(0)
+# pen.penup()
+# pen.hideturtle()
+#########################
 
 
 
+
+
+  
+# Run the program
 main()
+#rundown
+#log in. Display admin or student 
+#for admin and student create a  log in and student email system
 
-
-                        
