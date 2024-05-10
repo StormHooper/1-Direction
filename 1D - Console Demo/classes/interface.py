@@ -5,6 +5,12 @@ import classes.admin as Admin
 class AuthenticationSystem():
 
   def __init__(self):
+    """
+    Constructor for the AuthenticationSystem class.
+
+    students - A dictionary of student objects, where the keys are the student IDs and the values are the student objects.
+    admins - A dictionary of admin objects, where the keys are the admin IDs and the values are the admin objects.
+    """
     self.students = {
         "student@student.csulb.edu":
         ["password", Student.Student(0, "Patient Zero")],
@@ -17,6 +23,12 @@ class AuthenticationSystem():
         ["password", Admin.Admin(0,"Admin", 
         student_edit=True,student_addcourse=True,student_removecourse=True,create_course=True)],
 
+        #tester admin
+        "1":
+        ["1", Admin.Admin(0,"Admin", 
+        student_edit=True,student_addcourse=True,student_removecourse=True,create_course=True)],
+
+      
         "studentmanager@csulb.edu":
         ["password", Admin.Admin(1,"Student Manager", 
         student_edit=True,student_addcourse=True,student_removecourse=True)],
@@ -26,19 +38,30 @@ class AuthenticationSystem():
         create_course=True)]
 
     }
-    #Prototype function
   def get_student_list(self):
     return [student[1] for student in self.students.values()]
 
     # STRUCTURE:
     # "{email}" : [ "{password}", {student : Student}
   def get_student(self, id: int):
+    """
+    Returns the student with the given id.
+
+    Args:
+      id (int): The id of the student to be returned.
+    """
     for user in self.students.values():
       if user[1].id == id:
         return user[1]
     return None
 
   def get_admin(self, id: int):
+    """
+    Returns the admin with the given id.
+
+    Args:
+      id (int): The id of the admin to be returned.
+    """
     for user in self.admins.values():
       if user[1].id == id:
         return user[1]
@@ -66,6 +89,13 @@ class AuthenticationSystem():
     return False
 
   def get_user(self, role: str, email: str):
+    """
+    Returns the user object based on the role and email.
+
+    Args:
+        role (str): The role of the user.
+        email (str): The email of the user.
+    """
     if role.lower() == "student":
       emails = self.students
     elif role.lower() == "admin":
@@ -76,6 +106,13 @@ class AuthenticationSystem():
       return emails[email][1]
 
   def login(self, choice):
+    """
+    Logs in the user based on their role and email.
+    Returns the user object if successful, None otherwise.
+
+    Args:
+        choice (int): The choice of the user.
+    """
     if choice == 1:
       role = "student"
     elif choice == 2:

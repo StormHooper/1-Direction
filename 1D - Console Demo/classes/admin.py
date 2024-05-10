@@ -112,23 +112,6 @@ class Admin:
           # Get course ID from user input
           course_id = input("Enter the ID of the course: ")
 
-          '''# Get criteria from user inputqr
-          criteria_list = []
-          add_criteria = input("Do you want to add eligibility criteria? (Y/N): ").upper()
-          invalid = True
-          while invalid:
-            if add_criteria == "Y":
-                criteria_name = input("Enter the name of the criteria: ")
-                criteria_list.append(criteria_name)
-                invalid = False
-            elif add_criteria == "N":
-                invalid = False
-            else:
-                print("Invalid input. Please try again.")
-          
-          # Create Criteria objects
-          criteria_objects = [criteria.Criteria(name) for name in criteria_list]
-          '''
           # Create the course object with the gathered information
           new_course = course.Course(course_name, capacity, course_id, notify_students)
           print(f"Course {new_course.name} created successfully.")
